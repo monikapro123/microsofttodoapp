@@ -1,6 +1,6 @@
 <?php
 
-include './config/database.php';
+include './config/database.php';  //add database connection
 ?>
 <html lang="en">
 
@@ -358,49 +358,50 @@ include './config/database.php';
         }
 
         function getMaxOrZero(arr) {
-                    return arr.length ? Math.max(...arr) : 0;
-                };
+            return arr.length ? Math.max(...arr) : 0;
+        };
 
         $(document).on('click', '#addnewlistbtn', function (e) {
             // e.preventDefault();
-            let allLists=$(".listspan");
-            let temp_list="untitled list";
-            let list="untitled list";
-            let list_no=1;
-             if(allLists.length>0){
+            let allLists = $(".listspan");
+            let temp_list = "untitled list";
+            let list = "untitled list";
+            let list_no = 1;
+            if (allLists.length > 0) {
                 alert("list already exist");
                 console.log(allLists);
-                let arrTemp=[];
-               allLists.each(function(){
-                   let temp_list=$(this).attr("temp_list");
-                   let list_no=$(this).attr("list_no");
-                   console.log(temp_list);
-                   if((temp_list.slice(0,13))==="untitled list"){
-                       arrTemp.push(list_no);
-                   };
-               });
-               let maxNo= getMaxOrZero(arrTemp);
-                        // console.log(maxNo)
-                        list_no =parseInt(maxNo)+1;
-                        // let temp=parseInt(maxNo)-1;
-                        list = 'Untitled List ('+maxNo+')';
-                        temp_list = 'Untitled List('+maxNo+')';
-                
-             }
+                let arrTemp = [];
+                allLists.each(function () {
+                    let temp_list = $(this).attr("temp_list");
+                    let list_no = $(this).attr("list_no");
+                    console.log(temp_list);
+                    if ((temp_list.slice(0, 13)) === "untitled list") {
+                        arrTemp.push(list_no);
+                    };
+                });
+                let maxNo = getMaxOrZero(arrTemp);
+                // console.log(maxNo)
+                list_no = parseInt(maxNo) + 1;
+                // let temp=parseInt(maxNo)-1;
+                list = 'Untitled List (' + maxNo + ')';
+                temp_list = 'Untitled List(' + maxNo + ')';
+
+            }
             $.ajax({
                 url: "./config/server.php",
                 type: 'post',
-                data: { 
+                data: {
                     addList: true,
-                     listname: list,
-                     listno: list_no,
-                    temp_list: temp_list},
+                    listname: list,
+                    listno: list_no,
+                    temp_list: temp_list
+                },
                 success: function (response) {
                     const res = JSON.parse(response);
                     console.log(res);
                     if (res.success) {
 
-                        renderlist(res.data,1);
+                        renderlist(res.data, 1);
 
                     }
                 },
@@ -432,29 +433,29 @@ include './config/database.php';
         // function renderlist_1(data) {
         //     data.forEach(list => {
         //         let html = `<li class="flex listcontextmenu list-none py-1 mr-4 px-4 rounded-lg mb-1" data-id="${list.id}">
-                
+
         //         <i class="fa-solid fa-bars mt-4 mr-2"></i>
         //         <span class=" listspan${list.id} listSpan text-lg font-semibold mt-2 ml-4">${list.newlist}(${list.id})</span>
         //         <input class="hidden listInput${list.id} listInput listInputActive bg-gray-50 border-none border-b-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-blue-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="list_name" value="${list.newlist}" />
-                
+
         //         </li>`;
         //         $("#newlistdata").append(html);
         //     });
         // }
         //render newlist
-        function renderlist(data,listinput="") {
+        function renderlist(data, listinput = "") {
             // console.log(data);
             // const tasklistdata = ;
             // const tasklistdata = $("#tasklist").empty();
             //  html="";
-            if(listinput==1){
-                var span="hidden";
-                var input="";
-            }else{
-                var span="";
-                var input="hidden";
+            if (listinput == 1) {
+                var span = "hidden";
+                var input = "";
+            } else {
+                var span = "";
+                var input = "hidden";
             }
-            
+
 
             data.forEach(list => {
                 let html = `<li class="flex listcontextmenu list-none py-1 mr-4 px-4 rounded-lg mb-1" data-id="${list.id}">
@@ -467,7 +468,7 @@ include './config/database.php';
 
 
                 $("#newlistdata").append(html);
-                $(".listInput"+list.id).focus().select();
+                $(".listInput" + list.id).focus().select();
                 $(".activeinput").attr("data-id", list.id);
             });
         };
